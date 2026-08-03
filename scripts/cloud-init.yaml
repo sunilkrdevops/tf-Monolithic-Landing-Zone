@@ -1,0 +1,45 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - wget
+  - gnupg
+  - software-properties-common
+  - lsb-release
+  - nginx
+
+write_files:
+  - path: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Production Azure Landing Zone</title>
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+          .container { background: #1e293b; padding: 2.5rem; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); border: 1px solid #334155; text-align: center; max-width: 500px; }
+          h1 { color: #38bdf8; font-size: 1.8rem; margin-bottom: 0.5rem; }
+          p { color: #94a3b8; font-size: 1rem; line-height: 1.5; }
+          .badge { display: inline-block; margin-top: 1rem; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; font-size: 0.875rem; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Production Azure Landing Zone</h1>
+          <p>Infrastructure provisioned via Terraform & configured via Cloud-Init.</p>
+          <div class="badge">Status: Nginx Running | Terraform Installed</div>
+        </div>
+      </body>
+      </html>
+    permissions: '0644'
+
+runcmd:
+  - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+  - apt-get update && apt-get install -y terraform
+  - systemctl enable nginx
+  - systemctl restart nginx

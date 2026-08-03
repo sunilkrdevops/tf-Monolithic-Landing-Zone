@@ -1,0 +1,26 @@
+# ==============================================================================
+# Sample Variable Values Configuration
+# File: terraform.tfvars.example
+# Copy this file to terraform.tfvars and set your secure values.
+# ==============================================================================
+
+prefix               = "alz"
+environment          = "prod"
+location             = "centralindia"
+vnet_cidr            = ["10.0.0.0/16"]
+frontend_subnet_cidr = ["10.0.1.0/24"]
+backend_subnet_cidr  = ["10.0.2.0/24"]
+bastion_subnet_cidr  = ["10.0.3.0/27"]
+vm_admin_username    = "azureadmin"
+vm_admin_password    = "P@ssw0rd1234!#Complex"
+vm_size              = "Standard_B2s"
+enable_key_vault     = true
+
+# Optional: Add your SSH Public Key string
+# ssh_public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..."
+
+tags = {
+  Environment = "Production"
+  Owner       = "DevOps"
+  ManagedBy   = "Terraform"
+}
